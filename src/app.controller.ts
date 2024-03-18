@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, Redirect, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { TinyUrlsService } from './tiny-url/tiny-url.service';
 import { CreateTinyUrlDto } from './tiny-url/dtos/create-tiny-url.dto';
 import { TinyUrl } from './tiny-url/interfaces/tiny-url.interface';
