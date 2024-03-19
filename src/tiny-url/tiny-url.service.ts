@@ -51,25 +51,16 @@ export class TinyUrlsService {
   }
 
   async findOriginalUrlByShortUrl(shortUrl: string): Promise<string> {
-    try {
-      const key = 'short-urls';
-      const shortUrlsCached: TinyUrl[] = await this.cacheManager.get(key) || [];
-      const shortUrlCached = shortUrlsCached.find(tinyUrl => tinyUrl.shortUrl === shortUrl);
+    const key = 'short-urls';
+    const shortUrlsCached: TinyUrl[] = await this.cacheManager.get(key) || [];
+    const shortUrlCached = shortUrlsCached.find(tinyUrl => tinyUrl.shortUrl === shortUrl);
 
-      if(shortUrlCached) {
-        return shortUrlCached.originalUrl;
-      }
-      
-      const shortUrls = await this.tinyUrlModel.findOne({ "shortUrl": shortUrl }).exec();
-      this.cacheManager.set(key, [...shortUrlsCached, shortUrls], 1000 * 10); 
-      return shortUrls.originalUrl;
-    } catch (error) {
-      throw new HttpException({
-        status: HttpStatus.NOT_FOUND,
-        error: 'Short url not found',
-      }, HttpStatus.NOT_FOUND, {
-        cause: error
-      });
+    if(shortUrlCached) {
+      return shortUrlCached.originalUrl;
     }
+    
+    const shortUrls = await this.tinyUrlModel.findOne({ "shortUrl": shortUrl }).exec();
+    this.cacheManager.set(key, [...shortUrlsCached, shortUrls], 1000 * 10); 
+    return shortUrls.originalUrl;
   }
 }
